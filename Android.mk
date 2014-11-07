@@ -26,11 +26,14 @@ LOCAL_PATH := $(BB_PATH)
 include $(CLEAR_VARS)
 
 # Explicitly set an architecture specific CONFIG_CROSS_COMPILER_PREFIX
-ifeq ($(TARGET_ARCH),arm)
-	BUSYBOX_CROSS_COMPILER_PREFIX := "arm-eabi-"
+ifneq ($(filter arm arm64,$(TARGET_ARCH)),)
+    BUSYBOX_CROSS_COMPILER_PREFIX := "arm-eabi-"
 endif
-ifeq ($(TARGET_ARCH),x86)
-	BUSYBOX_CROSS_COMPILER_PREFIX := "i686-linux-android-"
+ifneq ($(filter x86 x86_64,$(TARGET_ARCH)),)
+    BUSYBOX_CROSS_COMPILER_PREFIX := "i686-linux-android-"
+endif
+ifeq ($(TARGET_ARCH),mips)
+    BUSYBOX_CROSS_COMPILER_PREFIX := "mipsel-linux-android-"
 endif
 
 # Each profile require a compressed usage/config, outside the source tree for git history
@@ -163,10 +166,7 @@ include $(CLEAR_VARS)
 BUSYBOX_CONFIG:=full
 BUSYBOX_SUFFIX:=bionic
 LOCAL_SRC_FILES := $(BUSYBOX_SRC_FILES)
-ifeq ($(BIONIC_ICS),true)
-LOCAL_SRC_FILES += android/libc/__set_errno.c
-endif
-LOCAL_C_INCLUDES := $(BUSYBOX_C_INCLUDES)
+LOCAL_C_INCLUDES := $(bb_gen)/full/include $(BUSYBOX_C_INCLUDES)
 LOCAL_CFLAGS := $(BUSYBOX_CFLAGS)
 LOCAL_LDFLAGS += -Wl,--no-fatal-warnings
 LOCAL_MODULE := busybox
