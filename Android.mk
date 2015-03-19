@@ -25,16 +25,7 @@ include $(BUILD_STATIC_LIBRARY)
 LOCAL_PATH := $(BB_PATH)
 include $(CLEAR_VARS)
 
-# Explicitly set an architecture specific CONFIG_CROSS_COMPILER_PREFIX
-ifneq ($(filter arm arm64,$(TARGET_ARCH)),)
-    BUSYBOX_CROSS_COMPILER_PREFIX := "arm-eabi-"
-endif
-ifneq ($(filter x86 x86_64,$(TARGET_ARCH)),)
-    BUSYBOX_CROSS_COMPILER_PREFIX := "i686-linux-android-"
-endif
-ifeq ($(TARGET_ARCH),mips)
-    BUSYBOX_CROSS_COMPILER_PREFIX := "mipsel-linux-android-"
-endif
+BUSYBOX_CROSS_COMPILER_PREFIX := $(abspath $(TARGET_TOOLS_PREFIX))
 
 # Each profile require a compressed usage/config, outside the source tree for git history
 # We keep the uncompressed headers in local include-<profile> to track config changes.
