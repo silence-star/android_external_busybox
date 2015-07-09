@@ -154,11 +154,7 @@ static void server_print(void)
 
 	if (!sa)
 #endif
-<<<<<<< HEAD
 		//sa = (struct sockaddr*)&_res.nsaddr_list[0];
-=======
-		sa = (struct sockaddr*) &_res.nsaddr_list[0];
->>>>>>> remotes/cm/cm-12.1
 	server = xmalloc_sockaddr2dotted_noport(sa);
 
 	print_host(server, "Server:");
